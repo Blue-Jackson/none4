@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #game {
+            text-align: center;
+            font-size: 24px;
+        }
+        #gameOver {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <div id="score">
+            Score: <span id="scoreValue">0</span>
+        </div>
+        <div id="gameOver">
+            Game Over<br>
+            <span id="finalScore"></span><br>
+            Press Space to Restart
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let gameActive = true;
+        const scoreElement = document.getElementById('scoreValue');
+        const gameOverElement = document.getElementById('gameOver');
+        const finalScoreElement = document.getElementById('finalScore');
+
+        function updateScore() {
+            if (gameActive) {
+                score++;
+                scoreElement.textContent = score;
+            }
+        }
+
+        function gameOver() {
+            gameActive = false;
+            gameOverElement.style.display = 'block';
+            finalScoreElement.textContent = `Final Score: ${score}`;
+        }
+
+        function startGame() {
+            score = 0;
+            gameActive = true;
+            scoreElement.textContent = score;
+            gameOverElement.style.display = 'none';
+            
+            clearInterval(window.gameInterval);
+            clearTimeout(window.gameTimeout);
+            
+            window.gameInterval = setInterval(updateScore, 1000);
+            window.gameTimeout = setTimeout(gameOver, 10000);
+        }
+
+        // Start the game initially
+        startGame();
+
+        // Listen for space bar to restart
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space' && !gameActive) {
+                startGame();
+            }
+        });
+    </script>
+</body>
+</html>
